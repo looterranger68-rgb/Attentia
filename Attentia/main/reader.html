@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reader - Attentia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Merriweather:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Reader Specific Styles */
+        body {
+            overflow: hidden;
+            /* Prevent body scroll, handle in reader-container */
+        }
+
+        .reader-layout {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .reader-header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .back-btn {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .back-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .book-title-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .reader-content {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+
+        /* Text Reader Styles */
+        .text-reader-container {
+            height: 100%;
+            overflow-y: auto;
+            padding: 4rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: 'Merriweather', serif;
+            color: #e0e0e0;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        .text-reader-container h2 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary-color);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .text-reader-container p {
+            margin-bottom: 1.5rem;
+        }
+
+        /* PDF Viewer Styles */
+        .pdf-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .pdf-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Progress Indicator */
+        .reading-progress {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 101;
+        }
+
+        .reading-progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="reader-layout">
+        <header class="reader-header">
+            <a href="ebooks.html" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i> Back to Library
+            </a>
+            <div class="book-title-header" id="header-title">Loading...</div>
+            <div style="width: 100px;"></div> <!-- Spacer for centering -->
+        </header>
+
+        <main class="reader-content" id="reader-content">
+            <!-- Content injected here -->
+        </main>
+
+        <div class="reading-progress" id="progress-container">
+            <div class="reading-progress-bar" id="progress-bar"></div>
+        </div>
+    </div>
+
+    <script src="../js/books-data.js"></script>
+    <script src="../js/AttentiaCore.js"></script>
+    <script>
+        // Auth Guard
+        AttentiaCore.requireAuth();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get('book');
+            const book = booksData.find(b => b.id === bookId);
+
+            if (!book) {
+                alert('Book not found!');
+                window.location.href = 'ebooks.html';
+                return;
+            }
+
+            document.getElementById('header-title').textContent = book.title;
+            const contentContainer = document.getElementById('reader-content');
+            const progressBar = document.getElementById('progress-bar');
+
+            if (book.type === 'text') {
+                // Text Mode
+                const textContainer = document.createElement('div');
+                textContainer.className = 'text-reader-container';
+                textContainer.innerHTML = book.content;
+                contentContainer.appendChild(textContainer);
+
+                // Restore Progress
+                const savedProgress = AttentiaCore.getBookProgress(bookId);
+                if (savedProgress && savedProgress.scrollTop) {
+                    // Small delay to ensure rendering
+                    setTimeout(() => {
+                        textContainer.scrollTop = savedProgress.scrollTop;
+                    }, 100);
+                }
+
+                // Track Progress
+                textContainer.addEventListener('scroll', () => {
+                    const scrollTop = textContainer.scrollTop;
+                    const scrollHeight = textContainer.scrollHeight - textContainer.clientHeight;
+                    const percentage = scrollTop / scrollHeight;
+
+                    progressBar.style.width = `${percentage * 100}%`;
+
+                    // Save periodically (debounce could be added for optimization)
+                    AttentiaCore.saveBookProgress(bookId, {
+                        scrollTop: scrollTop,
+                        percentage: percentage
+                    });
+                });
+
+            } else if (book.type === 'pdf') {
+                // PDF Mode
+                document.getElementById('progress-container').style.display = 'none'; // Hide progress bar for PDF
+                const pdfContainer = document.createElement('div');
+                pdfContainer.className = 'pdf-container';
+                pdfContainer.innerHTML = `<iframe src="${book.file}" class="pdf-frame"></iframe>`;
+                contentContainer.appendChild(pdfContainer);
+
+                // Note: Granular PDF progress tracking is difficult with simple iframe embedding due to cross-origin restrictions on file:// protocol or lack of API access to the PDF viewer.
+                // We will just mark it as "opened" or "started".
+                AttentiaCore.saveBookProgress(bookId, {
+                    percentage: 0.1 // Mark as started
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

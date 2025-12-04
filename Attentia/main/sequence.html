@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sequence Recall - Attentia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: #0b0d0f;
+            color: white;
+            overflow: hidden;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .hud {
+            position: absolute;
+            top: 20px;
+            font-size: 24px;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 30px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .simon-board {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            background: #1a1d21;
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .simon-btn {
+            width: 150px;
+            height: 150px;
+            border-radius: 20px;
+            /* Soft squares */
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.1s;
+            border: none;
+        }
+
+        .simon-btn:active {
+            transform: scale(0.95);
+        }
+
+        .simon-btn.active {
+            opacity: 1;
+            box-shadow: 0 0 30px currentColor;
+            transform: scale(1.05);
+        }
+
+        .btn-red {
+            background: #ff4444;
+            color: #ff4444;
+        }
+
+        .btn-cyan {
+            background: #00bfff;
+            color: #00bfff;
+        }
+
+        .btn-green {
+            background: #00ff88;
+            color: #00ff88;
+        }
+
+        .btn-yellow {
+            background: #ffdd00;
+            color: #ffdd00;
+        }
+
+        /* Overlays */
+        .overlay-screen {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .btn-game {
+            padding: 15px 40px;
+            font-size: 18px;
+            background: linear-gradient(45deg, #00bfff, #0077aa);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="game-container">
+        <div class="hud">Round: <span id="score">0</span></div>
+
+        <div class="simon-board">
+            <div class="simon-btn btn-red" data-color="red"></div>
+            <div class="simon-btn btn-cyan" data-color="cyan"></div>
+            <div class="simon-btn btn-green" data-color="green"></div>
+            <div class="simon-btn btn-yellow" data-color="yellow"></div>
+        </div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="overlay-screen">
+        <h1>Sequence Recall</h1>
+        <p style="color:#cbd5db; margin-bottom:20px;">Watch the sequence and repeat it.</p>
+        <button class="btn-game" id="btn-start">Start Game</button>
+        <button class="btn-game" style="background:transparent; border:1px solid #555;"
+            onclick="location.href='games.html'">Back</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="overlay-screen hidden">
+        <h1>Game Over</h1>
+        <h2 style="font-size: 48px; margin: 20px 0; color: white;" id="final-score">Round 0</h2>
+        <button class="btn-game" id="btn-restart">Try Again</button>
+        <button class="btn-game" style="background:transparent; border:1px solid #555; margin-top:10px;"
+            onclick="location.href='games.html'">Back to Menu</button>
+    </div>
+
+    <script src="../js/AttentiaCore.js"></script>
+    <script src="../js/SequenceGame.js"></script>
+    <script>
+        const scoreEl = document.getElementById('score');
+        const startScreen = document.getElementById('start-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const finalScoreEl = document.getElementById('final-score');
+        const buttons = document.querySelectorAll('.simon-btn');
+
+        let game = null;
+
+        // Sound effects (simple oscillator)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playTone(freq) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.5);
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        const tones = {
+            red: 261.63,
+            cyan: 329.63,
+            green: 392.00,
+            yellow: 523.25
+        };
+
+        function activateBtn(color) {
+            const btn = document.querySelector(`.simon-btn[data-color="${color}"]`);
+            if (btn) {
+                btn.classList.add('active');
+                playTone(tones[color]);
+                setTimeout(() => btn.classList.remove('active'), 300);
+            }
+        }
+
+        function initGame() {
+            const difficulty = AttentiaCore.getDifficulty('sequence_recall');
+
+            game = new SequenceGame({
+                difficulty: difficulty,
+                onScoreUpdate: (s) => scoreEl.textContent = s,
+                onSequenceStep: (color) => activateBtn(color),
+                onGameOver: (res) => {
+                    finalScoreEl.textContent = `Round ${res.score}`;
+                    gameOverScreen.classList.remove('hidden');
+                    AttentiaCore.saveRun('sequence_recall', {
+                        outcome: res.score > 5 ? 'win' : 'loss',
+                        reward: res.score * 10,
+                        timestamp: Date.now(),
+                        promptUsedKey: 'sequence_std',
+                        actionSequence: []
+                    });
+                }
+            });
+
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            game.start();
+        }
+
+        buttons.forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                const color = btn.dataset.color;
+                activateBtn(color);
+                if (game) game.input(color);
+            });
+        });
+
+        document.getElementById('btn-start').addEventListener('click', () => {
+            audioCtx.resume();
+            initGame();
+        });
+        document.getElementById('btn-restart').addEventListener('click', initGame);
+    </script>
+</body>
+
+</html>

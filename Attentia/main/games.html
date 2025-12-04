@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - Attentia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+</head>
+
+<body>
+
+    <div class="background-video">
+        <video autoplay loop muted playsinline>
+            <source src="../video/brain.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="page-content">
+        <header class="navbar">
+            <div class="logo">
+                <a href="index.html">ATTENTIA</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="games.html" style="color: #00BFFF;">Games</a></li>
+                    <li><a href="meditation.html">Meditation</a></li>
+                    <li><a href="podcast.html">Podcasts</a></li>
+                    <li><a href="ebooks.html">E-Books</a></li>
+                    <li><a href="to-do-list.html">To Do List</a></li>
+                    <li><a href="analysis.html">Analysis</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-login">Login / Sign Up</a>
+            </div>
+        </header>
+
+        <main>
+            <section class="page-hero">
+                <h1>Brain Training Games</h1>
+                <p>Challenge your cognitive skills with our collection of science-backed games.</p>
+            </section>
+
+            <section class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="focus">Focus</button>
+                <button class="filter-btn" data-filter="memory">Memory</button>
+                <button class="filter-btn" data-filter="problem-solving">Problem Solving</button>
+                <button class="filter-btn" data-filter="speed">Speed</button>
+            </section>
+
+            <section class="games-grid">
+                <div class="game-info-card" data-category="speed focus">
+                    <div class="game-info-visual reflex-dash">
+                        <div class="shape circle-green"></div>
+                        <div class="shape square-purple"></div>
+                    </div>
+                    <h3>Reflex × Dash</h3>
+                    <p class="game-description">Test your reaction speed and accuracy by responding
+                        to quick-changing
+                        targets.</p>
+                    <div class="game-stats">
+                        <span><i class="fa-solid fa-star"></i> Difficulty: Medium</span>
+                    </div>
+                    <a href="reflex.html" class="btn-play-session">Play Game</a>
+                </div>
+                <div class="game-info-card" data-category="memory">
+                    <div class="game-info-visual sequence-recall">
+                        <div class="shape square-red"></div>
+                        <div class="shape square-cyan"></div>
+                        <div class="shape square-green"></div>
+                    </div>
+                    <h3>Sequence Recall</h3>
+                    <p class="game-description">Memorize and repeat increasingly complex sequences
+                        to boost your memory.
+                    </p>
+                    <div class="game-stats">
+                        <span><i class="fa-solid fa-star"></i> Difficulty: Hard</span>
+                    </div>
+                    <a href="sequence.html" class="btn-play-session">Play Game</a>
+                </div>
+                <div class="game-info-card" data-category="problem-solving">
+                    <div class="game-info-visual logic-flow">
+                        <div class="flow-box"></div>
+                        <div class="flow-line"></div>
+                        <div class="flow-box"></div>
+                    </div>
+                    <h3>Logic Flow</h3>
+                    <p class="game-description">Solve logic puzzles by creating correct pathways and
+                        connections.</p>
+                    <div class="game-stats">
+                        <span><i class="fa-solid fa-star"></i> Difficulty: Medium</span>
+                    </div>
+                    <a href="logic.html" class="btn-play-session">Play Game</a>
+                </div>
+                <div class="game-info-card" data-category="problem-solving">
+                    <div class="game-info-visual">
+                        <i class="fa-solid fa-chess-knight" id="chess-knight"></i>
+                    </div>
+                    <h3>Chess</h3>
+                    <p class="game-description">Master strategy and foresight in the classic game of
+                        chess against AI
+                        opponents.</p>
+                    <div class="game-stats">
+                        <span><i class="fa-solid fa-star"></i> Difficulty: Varies</span>
+                    </div>
+                    <a href="chess.html" class="btn-play-session">Play Game</a>
+                </div>
+                <div class="game-info-card" data-category="problem-solving focus">
+                    <div class="game-info-visual sudoku-visual">
+                        <div class="sudoku-cell">3</div>
+                        <div class="sudoku-cell"></div>
+                        <div class="sudoku-cell"></div>
+                        <div class="sudoku-cell"></div>
+                        <div class="sudoku-cell">1</div>
+                        <div class="sudoku-cell"></div>
+                        <div class="sudoku-cell"></div>
+                        <div class="sudoku-cell"></div>
+                        <div class="sudoku-cell">2</div>
+                    </div>
+                    <h3>Sudoku</h3>
+                    <p class="game-description">Fill the grid with numbers, testing your logic and
+                        deduction skills.</p>
+                    <div class="game-stats">
+                        <span><i class="fa-solid fa-star"></i> Difficulty: Easy</span>
+                    </div>
+                    <a href="sudoku.html" class="btn-play-session">Play Game</a>
+                </div>
+                <div class="game-info-card" data-category="problem-solving">
+                    <div class="game-info-visual">
+                        <i class="fa-solid fa-puzzle-piece" id="puzzle-piece"></i>
+                    </div>
+                    <h3>Jigsaw Puzzle</h3>
+                    <p class="game-description">Piece together beautiful images and improve your
+                        spatial reasoning
+                        skills.</p>
+                    <div class="game-stats">
+                        <span><i class="fa-solid fa-star"></i> Difficulty: Easy</span>
+                    </div>
+                    <a href="jigsaw.html" class="btn-play-session">Play Game</a>
+                </div>
+                <div class="game-info-card" data-category="problem-solving">
+                    <div class="game-info-visual">
+                        <i class="fa-solid fa-question" id="riddle-question"></i>
+                    </div>
+                    <h3>Riddles</h3>
+                    <p class="game-description">Solve clever riddles to challenge your lateral
+                        thinking and creativity.
+                    </p>
+                    <div class="game-stats">
+                        <span><i class="fa-solid fa-star"></i> Difficulty: Medium</span>
+                    </div>
+                    <a href="riddles.html" class="btn-play-session">Play Game</a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/AttentiaCore.js"></script>
+    <script src="../js/content-filter.js"></script>
+    <script>
+        // Auth Guard
+        AttentiaCore.requireAuth();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = AttentiaCore.getUser();
+            const authBtn = document.querySelector('.btn-login');
+
+            if (user) {
+                authBtn.textContent = 'Logout';
+                authBtn.href = '#';
+                authBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    AttentiaCore.logout();
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

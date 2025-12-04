@@ -1,0 +1,180 @@
+<title>Logic Flow - Attentia</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+<link rel="stylesheet" href="../css/style.css">
+<style>
+    body {
+        background: #0b0d0f;
+        color: white;
+        overflow: hidden;
+    }
+
+    .game-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    .grid-board {
+        display: grid;
+        gap: 5px;
+        padding: 20px;
+        background: #1a1d21;
+        border-radius: 10px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .cell {
+        width: 60px;
+        height: 60px;
+        background: #2a2e33;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .cell:hover {
+        background: #3a3e43;
+    }
+
+    .cell.path {
+        background: #00bfff;
+        box-shadow: 0 0 10px #00bfff;
+    }
+
+    .cell.obstacle {
+        background: #ff4444;
+        cursor: not-allowed;
+    }
+
+    .cell.start {
+        background: #00ff88;
+        box-shadow: 0 0 15px #00ff88;
+    }
+
+    .cell.end {
+        background: #ffdd00;
+        box-shadow: 0 0 15px #ffdd00;
+    }
+
+    .overlay-screen {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        text-align: center;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .btn-game {
+        padding: 15px 40px;
+        font-size: 18px;
+        background: linear-gradient(45deg, #00bfff, #0077aa);
+        border: none;
+        border-radius: 30px;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        margin-top: 20px;
+    }
+</style>
+</head>
+
+<body>
+
+    <div class="game-container">
+        <h2 style="margin-bottom: 20px;">Connect Green to Yellow</h2>
+        <div id="grid" class="grid-board"></div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="overlay-screen">
+        <h1>Logic Flow</h1>
+        <p style="color:#cbd5db; margin-bottom:20px;">Create a path from Start to End avoiding obstacles.</p>
+        <button class="btn-game" id="btn-start">Start Game</button>
+        <button class="btn-game" style="background:transparent; border:1px solid #555;"
+            onclick="location.href='games.html'">Back</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="overlay-screen hidden">
+        <h1>Puzzle Solved!</h1>
+        <p>Excellent reasoning.</p>
+        <h2 style="font-size: 48px; margin: 20px 0; color: white;" id="final-score">100</h2>
+        <button class="btn-game" id="btn-restart">Next Level</button>
+        <button class="btn-game" style="background:transparent; border:1px solid #555; margin-top:10px;"
+            onclick="location.href='games.html'">Back to Menu</button>
+    </div>
+
+    <script src="../js/AttentiaCore.js"></script>
+    <script src="../js/LogicGame.js"></script>
+    <script>
+        const gridEl = document.getElementById('grid');
+        const startScreen = document.getElementById('start-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const finalScoreEl = document.getElementById('final-score');
+
+        let game = null;
+
+        function renderGrid(grid, start, end) {
+            gridEl.innerHTML = '';
+            gridEl.style.gridTemplateColumns = `repeat(${grid.length}, 1fr)`;
+
+            grid.forEach((row, y) => {
+                row.forEach((val, x) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+
+                    if (x === start.x && y === start.y) cell.classList.add('start');
+                    else if (x === end.x && y === end.y) cell.classList.add('end');
+                    else if (val === -1) cell.classList.add('obstacle');
+                    else if (val === 1) cell.classList.add('path');
+
+                    cell.addEventListener('click', () => {
+                        game.toggleCell(x, y);
+                    });
+
+                    gridEl.appendChild(cell);
+                });
+            });
+        }
+
+        function initGame() {
+            const difficulty = AttentiaCore.getDifficulty('logic_flow');
+
+            game = new LogicGame({
+                difficulty: difficulty,
+                onGridUpdate: (grid, start, end) => renderGrid(grid, start, end),
+                onGameOver: (res) => {
+                    finalScoreEl.textContent = res.score;
+                    gameOverScreen.classList.remove('hidden');
+                    AttentiaCore.saveRun('logic_flow', {
+                        outcome: 'win',
+                        reward: res.score,
+                        timestamp: Date.now(),
+                        promptUsedKey: 'logic_std',
+                        actionSequence: []
+                    });
+                }
+            });
+
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            game.start();
+        }
+
+        document.getElementById('btn-start').addEventListener('click', initGame);
+        document.getElementById('btn-restart').addEventListener('click', initGame);
+    </script>
+</body>
+
+</html>

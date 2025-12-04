@@ -1,0 +1,1984 @@
+/* ====== Global Reset & Body Styles ====== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #0d1117;
+    /* Fallback color */
+    color: #c9d1d9;
+}
+
+/* ====== Background Video Styling ====== */
+.background-video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
+}
+
+.background-video video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center 30%;
+}
+
+.background-video::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(13, 17, 23, 0.7);
+    z-index: 0;
+}
+
+/* ====== Page Content Wrapper ====== */
+.page-content {
+    position: relative;
+    z-index: 1;
+    background-color: transparent;
+}
+
+main {
+    padding: 0;
+}
+
+/* ====== Navbar Styling ====== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: rgba(13, 17, 23, 0.5);
+    border-bottom: 1px solid #30363d;
+}
+
+.logo a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.navbar nav ul li a {
+    color: #c9d1d9;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.navbar nav ul li a:hover {
+    color: #00BFFF;
+}
+
+.btn-login {
+    padding: 10px 20px;
+    border: 1px solid #00BFFF;
+    color: #00BFFF;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-login:hover {
+    background-color: #00BFFF;
+    color: #ffffff;
+}
+
+/* ====== Hero Section Styling ====== */
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 100px 50px;
+    min-height: 80vh;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero-content h1 {
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #ffffff;
+}
+
+.hero-content p {
+    font-size: 18px;
+    margin: 20px auto 30px auto;
+    max-width: 600px;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    padding: 15px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #00BFFF;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px rgba(0, 191, 255, 0.8);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #00BFFF;
+    border: 1px solid #00BFFF;
+}
+
+.btn-secondary:hover {
+    background-color: #00BFFF;
+    color: #ffffff;
+}
+
+/* ====== Features Section Styling (Background Image Style) ====== */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 80px 50px;
+    border-top: 1px solid #30363d;
+    background-color: rgba(1, 4, 9, 0.7);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.feature-card {
+    border: 1px solid #30363d;
+    border-radius: 16px;
+    flex-basis: 30%;
+    max-width: 340px;
+    height: 300px;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #0d1117;
+}
+
+#brain-card {
+    background-image: url('../image/gameshub.png');
+}
+
+#meditation-card {
+    background-image: url('../image/meditation.png');
+}
+
+#analytics-card {
+    background-image: url('../image/analysis.png');
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    border-color: #00BFFF;
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.4);
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.1));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 16px;
+}
+
+.feature-card:hover::before {
+    opacity: 1;
+}
+
+.feature-card h3 {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 22px;
+    color: #ffffff;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.feature-card:hover h3 {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ====== Games Section Styling (WITH ANIMATIONS) ====== */
+.games {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 80px 50px;
+    background-color: rgba(1, 4, 9, 0.7);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+
+.game-card {
+    background-color: #161b22;
+    padding: 25px;
+    border-radius: 10px;
+    width: 320px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.game-card h3 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.game-visual {
+    height: 80px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.btn-play {
+    background-color: #00BFFF;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    margin-top: 20px;
+    font-weight: 500;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-play:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.7);
+}
+
+.shape {
+    border-radius: 8px;
+}
+
+/* -- Animation 1: Reflex × Dash -- */
+.reflex-dash {
+    justify-content: space-around;
+}
+
+.reflex-dash .circle-green {
+    width: 50px;
+    height: 50px;
+    background-color: #3fb950;
+    border-radius: 50%;
+    animation: reflexBlink 2s infinite;
+}
+
+.reflex-dash .square-purple {
+    width: 50px;
+    height: 50px;
+    background-color: #a371f7;
+    animation: reflexBlink 2s infinite;
+    animation-delay: 1s;
+}
+
+/* -- Animation 2: Sequence Recall -- */
+.sequence-recall .square-red {
+    width: 40px;
+    height: 40px;
+    background-color: #f85149;
+    animation: sequenceBlink 3s infinite;
+    animation-delay: 0s;
+}
+
+.sequence-recall .square-cyan {
+    width: 40px;
+    height: 40px;
+    background-color: #219ebc;
+    animation: sequenceBlink 3s infinite;
+    animation-delay: 1s;
+}
+
+.sequence-recall .square-green {
+    width: 40px;
+    height: 40px;
+    background-color: #3fb950;
+    animation: sequenceBlink 3s infinite;
+    animation-delay: 2s;
+}
+
+/* -- Animation 3: Logic Flow -- */
+.logic-flow {
+    align-items: center;
+}
+
+.logic-flow .flow-box {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #30363d;
+}
+
+.logic-flow .flow-line {
+    width: 50px;
+    height: 2px;
+    background-color: #30363d;
+    position: relative;
+}
+
+.logic-flow .flow-line::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #00BFFF;
+    animation: logicFlow 2s linear infinite;
+}
+
+/* ====== Progress Dashboard Styling ====== */
+.dashboard {
+    display: flex;
+    gap: 40px;
+    padding: 80px 50px;
+    background-color: rgba(1, 4, 9, 0.7);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    align-items: flex-start;
+}
+
+.dashboard-content {
+    flex-basis: 40%;
+}
+
+.dashboard-graph {
+    flex-basis: 60%;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+.dashboard h2,
+.dashboard h3 {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.learning-card {
+    background-color: #161b22;
+    border-radius: 10px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.learning-icon {
+    width: 60px;
+    height: 60px;
+    background: url('https://i.imgur.com/vJAU9G6.png') no-repeat center center;
+    background-size: contain;
+    flex-shrink: 0;
+}
+
+.learning-text h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.learning-text ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.learning-text ul li {
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.learning-text ul li::before {
+    content: '•';
+    color: #00BFFF;
+    font-weight: bold;
+    display: inline-block;
+    width: 20px;
+    margin-left: -20px;
+}
+
+.graph-label {
+    font-size: 14px;
+    color: #8b949e;
+    margin-bottom: 10px;
+}
+
+/* ====== Meditation Page Styles (Interactive) ====== */
+.page-hero {
+    text-align: center;
+    padding: 80px 50px;
+    color: #ffffff;
+}
+
+.page-hero h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.page-hero p {
+    font-size: 18px;
+    color: #c9d1d9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background-color: transparent;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background-color: #00BFFF;
+    color: #ffffff;
+    border-color: #00BFFF;
+    transform: translateY(-2px);
+}
+
+.meditation-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 0 50px 80px 50px;
+}
+
+.session-card {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 16px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    flex-basis: 300px;
+    /* Ek fixed basis diya */
+}
+
+.session-card:hover {
+    transform: translateY(-5px);
+    border-color: #00BFFF;
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+}
+
+.session-icon-container {
+    width: 80px;
+    height: 80px;
+    background-color: #0d1117;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.session-icon-container i {
+    font-size: 36px;
+    color: #00BFFF;
+}
+
+.session-info {
+    flex-grow: 1;
+}
+
+.session-info h3 {
+    font-size: 22px;
+    color: #ffffff;
+    margin-bottom: 8px;
+}
+
+.session-info p {
+    font-size: 14px;
+    color: #8b949e;
+    font-weight: 500;
+}
+
+.btn-play-session {
+    background-color: #0d1117;
+    color: #00BFFF;
+    border: 1px solid #00BFFF;
+    text-decoration: none;
+    padding: 10px 30px;
+    border-radius: 8px;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-play-session:hover {
+    background-color: #00BFFF;
+    color: #ffffff;
+}
+
+/* ====== Keyframes for Animations ====== */
+@keyframes reflexBlink {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    10%,
+    40% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}
+
+@keyframes sequenceBlink {
+    0% {
+        opacity: 0.3;
+    }
+
+    15% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    30% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0.3;
+    }
+}
+
+@keyframes logicFlow {
+    0% {
+        left: -5px;
+    }
+
+    100% {
+        left: 45px;
+    }
+}
+
+/* ... (Global, Video, Navbar, Hero, Features, Meditation page, etc. ka poora code) ... */
+
+/* ====== Games Page Styles ====== */
+
+.games-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 0 50px 80px 50px;
+}
+
+.game-info-card {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 16px;
+    padding: 25px;
+    flex-basis: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.game-info-card:hover {
+    transform: translateY(-5px);
+    border-color: #00BFFF;
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+}
+
+.game-info-visual {
+    width: 100%;
+    height: 100px;
+    background-color: #0d1117;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.game-info-card h3 {
+    font-size: 24px;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.game-description {
+    font-size: 15px;
+    color: #8b949e;
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 20px;
+}
+
+.game-stats {
+    font-size: 14px;
+    color: #c9d1d9;
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.game-stats i {
+    color: #00BFFF;
+    margin-right: 8px;
+}
+
+/* NAYE GAMES KE VISUALS KA STYLE */
+
+/* Puzzle aur Riddles ke bade icons ke liye */
+.game-info-visual>i {
+    font-size: 50px;
+    color: #00BFFF;
+}
+
+/* Sudoku grid ke liye */
+.sudoku-visual {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    width: 80px;
+    height: 80px;
+    padding: 0;
+}
+
+.sudoku-visual .sudoku-cell {
+    background-color: #161b22;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #c9d1d9;
+    animation: sudokuPulse 4s infinite;
+}
+
+/* NAYE GAMES KE ANIMATIONS */
+#chess-knight {
+    animation: chessMove 3s ease-in-out infinite;
+}
+
+#puzzle-piece {
+    animation: puzzleWiggle 2s ease-in-out infinite;
+}
+
+#riddle-question {
+    animation: riddlePulse 2s ease-in-out infinite;
+}
+
+
+/* ====== Keyframes for Animations (Naye keyframes add huye hain) ====== */
+
+/* ... (Puraane keyframes: reflexBlink, sequenceBlink, logicFlow) ... */
+
+@keyframes chessMove {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    20% {
+        transform: translate(-30px, -60px);
+    }
+
+    40% {
+        transform: translate(30px, -60px);
+    }
+
+    60% {
+        transform: translate(60px, 0);
+    }
+
+    80% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes sudokuPulse {
+
+    0%,
+    100% {
+        background-color: #161b22;
+    }
+
+    50% {
+        background-color: #30363d;
+    }
+}
+
+@keyframes puzzleWiggle {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(8deg);
+    }
+
+    75% {
+        transform: rotate(-8deg);
+    }
+}
+
+@keyframes riddlePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+/* ... Purana saara code ... */
+
+/* ====== To-do List Page Styles (Updated with Custom Dropdown) ====== */
+.todo-container {
+    display: flex;
+    justify-content: center;
+    padding: 0 50px 80px 50px;
+}
+
+.todo-app {
+    width: 100%;
+    max-width: 600px;
+    background-color: rgba(22, 27, 34, 0.8);
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #30363d;
+}
+
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0d1117;
+    border-radius: 30px;
+    margin-bottom: 25px;
+}
+
+.input-row input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 12px 20px;
+    color: #c9d1d9;
+    font-size: 16px;
+}
+
+/* Custom Dropdown Wrapper */
+.select-wrapper {
+    position: relative;
+    margin: 0 10px;
+}
+
+/* Custom Arrow using ::after */
+.select-wrapper::after {
+    content: '▼';
+    font-size: 12px;
+    color: #00BFFF;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    /* Isse arrow ke upar click karne par bhi dropdown khulega */
+}
+
+#difficulty-select {
+    /* Default arrow ko hataya */
+    -webkit-appearance: none;
+    appearance: none;
+
+    /* Nayi Styling */
+    background-color: #161b22;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    border-radius: 20px;
+    padding: 10px 35px 10px 15px;
+    /* Right padding badhayi taaki text arrow ke neeche na jaaye */
+    cursor: pointer;
+    outline: none;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+#difficulty-select:hover {
+    border-color: #00BFFF;
+}
+
+
+.input-row button {
+    border: none;
+    outline: none;
+    padding: 16px 30px;
+    background-color: #00BFFF;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: background-color 0.3s ease;
+}
+
+.input-row button:hover {
+    background-color: #009acd;
+}
+
+#list-container {
+    list-style: none;
+}
+
+#list-container li {
+    font-size: 17px;
+    padding: 12px 50px 12px 50px;
+    cursor: pointer;
+    position: relative;
+    color: #c9d1d9;
+    transition: color 0.4s ease;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#list-container li p {
+    flex-grow: 1;
+}
+
+#list-container li::before {
+    content: '';
+    position: absolute;
+    height: 24px;
+    width: 24px;
+    border-radius: 5px;
+    border: 2px solid #30363d;
+    background-color: #0d1117;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 8px;
+    transition: all 0.3s ease;
+}
+
+#list-container li:hover::before {
+    border-color: #00BFFF;
+}
+
+#list-container li.checked {
+    color: #586069;
+    text-decoration: line-through;
+}
+
+#list-container li.checked::before {
+    background-color: #00BFFF;
+    border-color: #00BFFF;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.difficulty-pill {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.difficulty-pill.easy {
+    background-color: #3fb950;
+}
+
+.difficulty-pill.medium {
+    background-color: #f0b819;
+}
+
+.submit-btn {
+    display: none;
+    /* By default hidden */
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    background-color: #00BFFF;
+    /* Changed to theme color */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 191, 255, 0.6);
+    /* Added glow effect */
+}
+
+.submit-btn:hover {
+    background-color: #009acd;
+    /* Darker blue on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(0, 191, 255, 0.8);
+}
+
+.feature-card-link {
+    text-decoration: none;
+    /* Removes underline from link */
+    color: inherit;
+    /* Ensures the text color is inherited */
+    display: block;
+    /* Makes the link behave like a block element */
+    flex-basis: 30%;
+    max-width: 340px;
+}
+
+/* Example for mobile phones */
+@media (max-width: 768px) {
+
+    .features,
+    .games {
+        flex-direction: column;
+        /* Cards ek ke neeche ek aayenge */
+        align-items: center;
+    }
+
+    .navbar nav ul {
+        display: none;
+        /* Mobile par menu icon dikhayein */
+    }
+}
+
+/* ... Purana saara code ... */
+
+/* ====== To-do List Page Styles ====== */
+
+/* ... (todo-container, todo-app, etc. ka code waisa hi rahega) ... */
+
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0d1117;
+    border-radius: 30px;
+    margin-bottom: 25px;
+    border: 1px solid transparent;
+    /* Error state ke liye border add kiya */
+    transition: border-color 0.3s ease;
+}
+
+/* Error state jab input khaali ho */
+.input-row.error {
+    animation: shake 0.5s ease;
+    border-color: #f85149;
+    /* Red border */
+}
+
+/* ... (baaki saara code waisa hi rahega) ... */
+
+/* ====== Keyframes for Animations ====== */
+
+/* ... (purane saare keyframes waise hi rahenge) ... */
+
+/* Shake Animation for empty input */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+/* ... Purana saara code ... */
+
+/* ====== To-do List Page Styles (Updated with CUSTOM Dropdown) ====== */
+.todo-container {
+    display: flex;
+    justify-content: center;
+    padding: 0 50px 80px 50px;
+}
+
+.todo-app {
+    width: 100%;
+    max-width: 600px;
+    background-color: rgba(22, 27, 34, 0.8);
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #30363d;
+}
+
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0d1117;
+    border-radius: 30px;
+    margin-bottom: 25px;
+}
+
+.input-row input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 12px 20px;
+    color: #c9d1d9;
+    font-size: 16px;
+}
+
+/* --- Custom Dropdown Styles --- */
+.custom-select-wrapper {
+    position: relative;
+    margin: 0 10px;
+    width: 120px;
+}
+
+.selected-option {
+    background-color: #161b22;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+    border-radius: 20px;
+    padding: 10px 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.3s ease;
+}
+
+.selected-option:hover {
+    border-color: #00BFFF;
+}
+
+.selected-option i {
+    font-size: 12px;
+    color: #00BFFF;
+    transition: transform 0.3s ease;
+}
+
+.custom-select-wrapper.open .selected-option i {
+    transform: rotate(180deg);
+}
+
+.options-list {
+    list-style: none;
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.custom-select-wrapper.open .options-list {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.options-list li {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.options-list li:hover {
+    background-color: #00BFFF;
+    color: #ffffff;
+}
+
+/* --- End of Custom Dropdown Styles --- */
+
+.input-row button {
+    border: none;
+    outline: none;
+    padding: 16px 30px;
+    background-color: #00BFFF;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: background-color 0.3s ease;
+}
+
+.input-row button:hover {
+    background-color: #009acd;
+}
+
+#list-container {
+    list-style: none;
+}
+
+/* ... Baaki To-do list ka CSS waisa hi rahega ... */
+/* ===== Attentia Game Modal (theme-consistent) ===== */
+.att-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(1, 4, 9, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 24px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.att-modal {
+    width: 92%;
+    max-width: 720px;
+    background: #0d1117;
+    /* matches card inner surface */
+    border: 1px solid #23262b;
+    border-radius: 14px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 4px 10px rgba(0, 191, 255, 0.05);
+    padding: 22px;
+    color: #c9d1d9;
+    font-family: 'Poppins', sans-serif;
+    animation: modalPop .18s cubic-bezier(.2, .9, .2, 1);
+}
+
+.att-modal h3 {
+    margin: 0 0 10px 0;
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.att-modal p {
+    color: #8b949e;
+    margin: 0 0 12px 0;
+}
+
+.att-modal .att-stage {
+    background: #0f1418;
+    border-radius: 10px;
+    padding: 18px;
+    margin: 14px 0;
+    min-height: 92px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #202428;
+}
+
+.att-modal .att-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.att-btn {
+    padding: 9px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: #161b22;
+    color: #c9d1d9;
+    cursor: pointer;
+    transition: all .18s ease;
+}
+
+.att-btn.primary {
+    background: linear-gradient(180deg, #00bfff, #009acd);
+    color: #fff;
+    border: none;
+    box-shadow: 0 6px 18px rgba(0, 191, 255, 0.14);
+}
+
+.att-btn:hover {
+    transform: translateY(-2px);
+}
+
+.att-small-btn {
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* small target styles that keep site aesthetic */
+/* Full Screen Overlay */
+.att-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: #0d1117;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.att-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.att-overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(22, 27, 34, 0.95);
+    border-bottom: 1px solid #30363d;
+}
+
+.att-overlay-header h2 {
+    font-size: 24px;
+    color: #58a6ff;
+    margin: 0;
+    font-weight: 600;
+}
+
+.att-close-btn {
+    background: transparent;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.att-close-btn:hover {
+    background: #21262d;
+    border-color: #8b949e;
+    color: #fff;
+}
+
+.att-overlay-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+}
+
+.att-overlay-desc {
+    color: #8b949e;
+    margin-bottom: 20px;
+    font-size: 16px;
+    max-width: 600px;
+    text-align: center;
+}
+
+.att-stage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Game Specific Full Screen Tweaks */
+.att-target-circle {
+    width: 80px;
+    height: 80px;
+    background: #2ea043;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(46, 160, 67, 0.6);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.att-target-circle:active {
+    transform: translate(-50%, -50%) scale(0.9);
+}
+
+.seq-item-active {
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Countdown Overlay */
+.att-countdown {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 120px;
+    font-weight: bold;
+    color: #00BFFF;
+    text-shadow: 0 0 30px rgba(0, 191, 255, 0.8);
+    pointer-events: none;
+    animation: countdownPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    z-index: 20;
+}
+
+@keyframes countdownPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Ripple Effect for Reflex Dash */
+.att-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(0, 191, 255, 0.6);
+    transform: scale(0);
+    animation: rippleAnim 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes rippleAnim {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Sequence Recall Animations */
+.seq-item-active {
+    box-shadow: 0 0 25px #00BFFF, 0 0 50px #00BFFF;
+    transform: scale(1.1);
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.shake-anim {}
+
+.att-overlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(22, 27, 34, 0.95);
+    border-bottom: 1px solid #30363d;
+}
+
+.att-overlay-header h2 {
+    font-size: 24px;
+    color: #58a6ff;
+    margin: 0;
+    font-weight: 600;
+}
+
+.att-close-btn {
+    background: transparent;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.att-close-btn:hover {
+    background: #21262d;
+    border-color: #8b949e;
+    color: #fff;
+}
+
+.att-overlay-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+}
+
+.att-overlay-desc {
+    color: #8b949e;
+    margin-bottom: 20px;
+    font-size: 16px;
+    max-width: 600px;
+    text-align: center;
+}
+
+.att-stage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Game Specific Full Screen Tweaks */
+.att-target-circle {
+    width: 80px;
+    height: 80px;
+    background: #2ea043;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(46, 160, 67, 0.6);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.att-target-circle:active {
+    transform: translate(-50%, -50%) scale(0.9);
+}
+
+.seq-item-active {
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Countdown Overlay */
+.att-countdown {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 120px;
+    font-weight: bold;
+    color: #00BFFF;
+    text-shadow: 0 0 30px rgba(0, 191, 255, 0.8);
+    pointer-events: none;
+    animation: countdownPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    z-index: 20;
+}
+
+@keyframes countdownPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Ripple Effect for Reflex Dash */
+.att-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(0, 191, 255, 0.6);
+    transform: scale(0);
+    animation: rippleAnim 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes rippleAnim {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Sequence Recall Animations */
+.seq-item-active {
+    box-shadow: 0 0 25px #00BFFF, 0 0 50px #00BFFF;
+    transform: scale(1.1);
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.shake-anim {
+    animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+    border-color: #f85149 !important;
+    box-shadow: 0 0 15px rgba(248, 81, 73, 0.6);
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    border-radius: 8px;
+    padding: 5px;
+    margin-bottom: 30px;
+}
+
+.toggle-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #8b949e;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.toggle-btn.active {
+    background: #21262d;
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #c9d1d9;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.form-group input {
+    width: 100%;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 12px;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #00BFFF;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #8b949e;
+    cursor: pointer;
+}
+
+.forgot-password {
+    color: #00BFFF;
+    text-decoration: none;
+}
+
+.btn-submit {
+    width: 100%;
+    background: #00BFFF;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-submit:hover {
+    background: #009acd;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 191, 255, 0.3);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 25px;
+    color: #8b949e;
+    font-size: 14px;
+}
+
+.auth-footer a {
+    color: #00BFFF;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.error-message {
+    background: rgba(248, 81, 73, 0.1);
+    border: 1px solid #f85149;
+    color: #f85149;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: none;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Animation for form switching */
+.form-slide {
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* ====== Authentication Page Styles (Redesigned) ====== */
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.auth-card {
+    background: rgba(22, 27, 34, 0.95);
+    border: 1px solid #30363d;
+    border-radius: 24px;
+    padding: 50px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.auth-header h2 {
+    color: #fff;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.auth-header p {
+    color: #8b949e;
+    font-size: 14px;
+}
+
+.auth-toggle {
+    display: flex;
+    background: #0d1117;
+    border-radius: 12px;
+    padding: 6px;
+    margin-bottom: 30px;
+    width: 100%;
+    border: 1px solid #30363d;
+}
+
+.toggle-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #8b949e;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+    background: #00BFFF;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 191, 255, 0.4);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #c9d1d9;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: #fff;
+    outline: none;
+    font-size: 14px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #00BFFF;
+    box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.1);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    font-size: 13px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #c9d1d9;
+    cursor: pointer;
+}
+
+.remember-me input[type='checkbox'] {
+    accent-color: #00BFFF;
+    width: 16px;
+    height: 16px;
+}
+
+.forgot-password {
+    color: #00BFFF;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.forgot-password:hover {
+    color: #66d9ff;
+}
+
+.btn-submit {
+    width: 100%;
+    background: #00BFFF;
+    color: #ffffff;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 191, 255, 0.3);
+}
+
+.btn-submit:hover {
+    background: #009acd;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 191, 255, 0.5);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 25px;
+    color: #8b949e;
+    font-size: 14px;
+}
+
+.auth-footer a {
+    color: #00BFFF;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    background: rgba(248, 81, 73, 0.1);
+    border: 1px solid #f85149;
+    color: #f85149;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: none;
+    font-size: 14px;
+    text-align: center;
+}
+
+.form-slide {
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+

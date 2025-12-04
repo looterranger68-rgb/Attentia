@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation - Attentia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+</head>
+
+<body>
+
+    <div class="background-video">
+        <video autoplay loop muted playsinline>
+            <source src="../video/brain.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="page-content">
+        <header class="navbar">
+            <div class="logo">
+                <a href="index.html">ATTENTIA</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="games.html">Games</a></li>
+                    <li><a href="meditation.html" style="color: #00BFFF;">Meditation</a></li>
+                    <li><a href="podcast.html">Podcasts</a></li>
+                    <li><a href="ebooks.html">E-Books</a></li>
+                    <li><a href="to-do-list.html">To Do List</a></li>
+                    <li><a href="analysis.html">Analysis</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-login">Login / Sign Up</a>
+            </div>
+        </header>
+
+        <main>
+            <section class="page-hero">
+                <h1>Find Your Inner Peace</h1>
+                <p>Select a session below to begin your journey towards calm and focus.</p>
+            </section>
+
+            <section class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="focus">Focus</button>
+                <button class="filter-btn" data-filter="sleep">Sleep</button>
+                <button class="filter-btn" data-filter="anxiety">Anxiety</button>
+                <button class="filter-btn" data-filter="beginner">Beginner</button>
+            </section>
+
+            <section class="meditation-grid">
+                <div class="session-card" data-category="beginner">
+                    <div class="session-icon-container">
+                        <i class="fa-solid fa-person-praying"></i>
+                    </div>
+                    <div class="session-info">
+                        <h3>Morning Calm</h3>
+                        <p>10 MIN</p>
+                    </div>
+                    <a href="https://youtu.be/flyaWBnDt4Q?si=38afS3NCyXpp0y-F" target="_blank"
+                        class="btn-play-session">Start Session</a>
+                </div>
+                <div class="session-card" data-category="focus">
+                    <div class="session-icon-container">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <div class="session-info">
+                        <h3>Focus Boost</h3>
+                        <p>15 MIN</p>
+                    </div>
+                    <a href="https://youtu.be/OdV6SkGZb3g?si=hc3W0xhqlQojlXqA" target="_blank"
+                        class="btn-play-session">Start Session</a>
+                </div>
+                <div class="session-card" data-category="sleep">
+                    <div class="session-icon-container">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                    <div class="session-info">
+                        <h3>Deep Sleep</h3>
+                        <p>20 MIN</p>
+                    </div>
+                    <a href="https://youtu.be/xsfyb1pStdw?si=wy2BU8l-zXB8u8N1" target="_blank"
+                        class="btn-play-session">Start Session</a>
+                </div>
+                <div class="session-card" data-category="anxiety">
+                    <div class="session-icon-container">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <div class="session-info">
+                        <h3>Stress Relief</h3>
+                        <p>5 MIN</p>
+                    </div>
+                    <a href="https://youtu.be/9yj8mBfHlMk?si=5C1zzSoKUAyIVFSb" target="_blank"
+                        class="btn-play-session">Start Session</a>
+                </div>
+                <div class="session-card" data-category="focus">
+                    <div class="session-icon-container">
+                        <i class="fa-solid fa-person-walking"></i>
+                    </div>
+                    <div class="session-info">
+                        <h3>Mindful Walking</h3>
+                        <p>15 MIN</p>
+                    </div>
+                    <a href="https://youtu.be/Sd9VnbhEIjo?si=SIrKVn42Nz6gWFsP" target="_blank"
+                        class="btn-play-session">Start Session</a>
+                </div>
+                <div class="session-card" data-category="beginner">
+                    <div class="session-icon-container">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <div class="session-info">
+                        <h3>Beginner's Guide</h3>
+                        <p>10 MIN</p>
+                    </div>
+                    <a href="https://youtu.be/U9YKY7fdwyg?si=aB5gqzepTlL249sE" target="_blank"
+                        class="btn-play-session">Start Session</a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/content-filter.js"></script>
+    <script src="../js/AttentiaCore.js"></script>
+    <script>
+        // Auth Guard
+        AttentiaCore.requireAuth();
+
+        // Update UI based on Auth State
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = AttentiaCore.getUser();
+            const authBtn = document.querySelector('.btn-login');
+
+            if (user) {
+                authBtn.textContent = 'Logout';
+                authBtn.href = '#';
+                authBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    AttentiaCore.logout();
+                });
+            }
+
+            // --- Tracking Logic ---
+            const sessionButtons = document.querySelectorAll('.btn-play-session');
+            sessionButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // e.preventDefault(); // Allow navigation to YouTube
+                    const card = btn.closest('.session-card');
+                    const title = card.querySelector('h3').textContent;
+                    const duration = card.querySelector('p').textContent;
+                    const category = card.dataset.category;
+
+                    // Save run
+                    AttentiaCore.saveRun('meditation', {
+                        session: title,
+                        duration: duration,
+                        category: category,
+                        timestamp: Date.now(),
+                        outcome: 'started'
+                    });
+
+                    // alert(`Starting session: ${title}. Relax and focus...`);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

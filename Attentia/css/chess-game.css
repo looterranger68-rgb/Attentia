@@ -1,0 +1,91 @@
+/* chess-game.css - paste into your css folder and link from games.html */
+.chess-wrapper {
+  display:flex;
+  gap:22px;
+  align-items:flex-start;
+  color: #cfd8de;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* left column: board */
+.chess-panel {
+  background: #0d1117;
+  border: 1px solid #202428;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  width: 480px;
+}
+
+.chess-board-container {
+  width: 440px;
+  height: 440px;
+  margin: 0 auto 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #16181b;
+  background: linear-gradient(180deg,#0b0d0f,#0f1418);
+}
+
+/* right column: controls + rules */
+.chess-sidebar {
+  flex:1;
+  min-width:280px;
+  background: #0f1418;
+  border: 1px solid #202428;
+  border-radius: 12px;
+  padding: 14px;
+  max-height: 480px;
+  overflow:auto;
+}
+
+.chess-hdr {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:8px;
+}
+.chess-hdr h3 { margin:0; color:#ffffff; font-size:20px; }
+.chess-meta { color:#8b949e; font-size:13px; }
+
+/* Move/AI info */
+.ai-bubble {
+  background: linear-gradient(180deg, rgba(0,191,255,0.06), rgba(0,191,255,0.04));
+  border: 1px solid rgba(0,191,255,0.08);
+  padding:10px;
+  border-radius:10px;
+  color:#bfefff;
+  margin-bottom:10px;
+  font-size:14px;
+}
+
+/* Buttons */
+.chess-controls { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+.att-btn { padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:#161b22; color:#c9d1d9; cursor:pointer; }
+.att-btn.primary { background: linear-gradient(180deg,#00bfff,#009acd); color:#fff; border:none; box-shadow:0 6px 18px rgba(0,191,255,0.12); }
+
+/* Move list */
+.move-list {
+  background:#081018;
+  border-radius:8px;
+  padding:8px;
+  margin-top:8px;
+  border:1px solid #111518;
+  font-size:13px;
+}
+.move-list .move { padding:6px 0; border-bottom:1px dashed rgba(255,255,255,0.03); display:flex; justify-content:space-between; }
+
+/* Rulebook */
+.rulebook { margin-top:10px; background:#0b0f12; border-radius:8px; padding:10px; border:1px solid #151719; color:#cbd5db; font-size:13px; }
+.rulebook h4 { margin:0 0 6px 0; color:#fff; font-size:15px; }
+
+/* small status */
+.chess-status { color:#9fb0b9; font-size:13px; margin-bottom:8px; }
+
+/* responsive */
+@media (max-width:980px){
+  .chess-wrapper { flex-direction:column; align-items:center; }
+  .chess-panel { width:100%; max-width:540px; }
+  .chess-sidebar { width:100%; max-width:540px; }
+}

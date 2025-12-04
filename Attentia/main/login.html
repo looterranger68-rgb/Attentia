@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Attentia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+</head>
+
+<body>
+
+    <div class="background-video">
+        <video autoplay loop muted playsinline>
+            <source src="../video/brain.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="page-content">
+        <main class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h2 id="auth-title">Welcome Back</h2>
+                    <p id="auth-subtitle">Enter your details to access your account</p>
+                </div>
+
+                <div class="auth-toggle">
+                    <button class="toggle-btn active" id="btn-login-view" onclick="switchView('login')">Login</button>
+                    <button class="toggle-btn" id="btn-signup-view" onclick="switchView('signup')">Sign Up</button>
+                </div>
+
+                <div id="error-display" class="error-message"></div>
+
+                <!-- Login Form -->
+                <form id="login-form" class="auth-form form-slide">
+                    <div class="form-group">
+                        <label for="login-username">Username</label>
+                        <input type="text" id="login-username" placeholder="Enter your username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="Enter your password" required>
+                    </div>
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="remember-me"> Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="btn-submit">Sign In</button>
+                    <div class="auth-footer">
+                        <p>Don't have an account? <a href="#" onclick="switchView('signup')">Sign Up</a></p>
+                    </div>
+                </form>
+
+                <!-- Sign Up Form (Hidden by default) -->
+                <form id="signup-form" class="auth-form form-slide" style="display: none;">
+                    <div class="form-group">
+                        <label for="signup-username">Username</label>
+                        <input type="text" id="signup-username" placeholder="Choose a username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" placeholder="Create a password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-confirm-password">Confirm Password</label>
+                        <input type="password" id="signup-confirm-password" placeholder="Confirm your password"
+                            required>
+                    </div>
+                    <button type="submit" class="btn-submit">Create Account</button>
+                    <div class="auth-footer">
+                        <p>Already have an account? <a href="#" onclick="switchView('login')">Sign In</a></p>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Core Logic -->
+    <script src="../js/AttentiaCore.js"></script>
+
+    <script>
+        // UI Logic for switching views
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const btnLoginView = document.getElementById('btn-login-view');
+        const btnSignupView = document.getElementById('btn-signup-view');
+        const authTitle = document.getElementById('auth-title');
+        const authSubtitle = document.getElementById('auth-subtitle');
+        const errorDisplay = document.getElementById('error-display');
+
+        function switchView(view) {
+            errorDisplay.style.display = 'none'; // Clear errors
+            if (view === 'login') {
+                loginForm.style.display = 'flex';
+                signupForm.style.display = 'none';
+                btnLoginView.classList.add('active');
+                btnSignupView.classList.remove('active');
+                authTitle.textContent = 'Welcome Back';
+                authSubtitle.textContent = 'Enter your details to access your account';
+            } else {
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'flex';
+                btnLoginView.classList.remove('active');
+                btnSignupView.classList.add('active');
+                authTitle.textContent = 'Create Account';
+                authSubtitle.textContent = 'Join us to start your mental training';
+            }
+        }
+
+        // Auth Logic Integration
+        document.addEventListener('DOMContentLoaded', () => {
+            const authService = AttentiaCore.auth;
+
+            // Handle Login
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('login-username').value;
+                const password = document.getElementById('login-password').value;
+
+                const result = authService.login(username, password);
+                if (result.success) {
+                    window.location.href = '../../index.html';
+                } else {
+                    showError(result.message);
+                }
+            });
+
+            // Handle Signup
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('signup-username').value;
+                const password = document.getElementById('signup-password').value;
+                const confirmPassword = document.getElementById('signup-confirm-password').value;
+
+                if (password !== confirmPassword) {
+                    showError("Passwords do not match!");
+                    return;
+                }
+
+                const result = authService.register(username, password);
+                if (result.success) {
+                    // Auto login after signup
+                    authService.login(username, password);
+                    window.location.href = '../../index.html';
+                } else {
+                    showError(result.message);
+                }
+            });
+
+            function showError(msg) {
+                errorDisplay.textContent = msg;
+                errorDisplay.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

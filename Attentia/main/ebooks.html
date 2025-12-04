@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Books - Attentia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* E-Books Specific Styles */
+        :root {
+            --primary-color: #00BFFF;
+            --card-bg: #161b22;
+            --text-muted: #8b949e;
+        }
+
+        .ebook-hero {
+            background: transparent;
+            padding: 100px 20px 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .ebook-hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+        }
+
+        .ebook-hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 24px;
+            padding-left: 55px;
+            border-radius: 50px;
+            border: 1px solid rgba(48, 54, 61, 0.8);
+            background: rgba(13, 17, 23, 0.6);
+            color: white;
+            font-size: 1.1rem;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 25px rgba(0, 191, 255, 0.25);
+            background: rgba(13, 17, 23, 0.9);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        .books-section {
+            padding: 60px 50px;
+            max-width: 1400px;
+            margin: 0 auto 60px;
+            background-color: rgba(1, 4, 9, 0.75);
+            border-radius: 20px;
+            border: 1px solid rgba(48, 54, 61, 0.5);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+            padding-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #fff;
+            border-left: 5px solid var(--primary-color);
+            padding-left: 20px;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+        }
+
+        .book-card {
+            background: rgba(22, 27, 34, 0.8);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: row;
+            height: 220px;
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 30px rgba(0, 191, 255, 0.2);
+            z-index: 10;
+        }
+
+        .book-cover-container {
+            width: 150px;
+            height: 100%;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+            background: #0d1117;
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.9;
+            transition: transform 0.6s ease, opacity 0.3s;
+        }
+
+        .book-card:hover .book-cover {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+
+        .book-content {
+            padding: 20px;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid #30363d;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.8rem;
+        }
+
+        .btn-read {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            background: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+
+        .btn-read:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #30363d;
+            margin-top: 10px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), #0080ff);
+            width: 0%;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .ebook-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .books-section {
+                padding: 40px 20px;
+            }
+
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .book-card {
+                height: auto;
+                min-height: 200px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background-video">
+        <video autoplay loop muted playsinline>
+            <source src="../video/brain.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="page-content">
+        <header class="navbar">
+            <div class="logo">
+                <a href="index.html">ATTENTIA</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="games.html">Games</a></li>
+                    <li><a href="meditation.html">Meditation</a></li>
+                    <li><a href="podcast.html">Podcasts</a></li>
+                    <li><a href="ebooks.html" style="color: #00BFFF;">E-Books</a></li>
+                    <li><a href="to-do-list.html">To Do List</a></li>
+                    <li><a href="analysis.html">Analysis</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-login">Login / Sign Up</a>
+            </div>
+        </header>
+
+        <main>
+            <section class="ebook-hero">
+                <h1>Attentia Library</h1>
+                <p>Unlock your potential with our curated collection of timeless wisdom.</p>
+                <div class="search-container">
+                    <i class="fa-solid fa-search search-icon"></i>
+                    <input type="text" id="book-search" class="search-input"
+                        placeholder="Search by title, author, or topic...">
+                </div>
+            </section>
+
+            <section class="books-section">
+                <div class="section-header">
+                    <h2 class="section-title">All Books</h2>
+                </div>
+                <div class="books-grid" id="books-container">
+                    <!-- Books will be injected here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/books-data.js"></script>
+    <script src="../js/AttentiaCore.js"></script>
+    <script>
+        console.log('E-Books page loaded');
+
+        // Global tracking function
+        window.trackBookRead = (title, type) => {
+            if (typeof AttentiaCore !== 'undefined') {
+                AttentiaCore.saveRun('ebook', {
+                    title: title,
+                    type: type,
+                    timestamp: Date.now(),
+                    outcome: 'started'
+                });
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Auth Guard
+            if (typeof AttentiaCore !== 'undefined') {
+                AttentiaCore.requireAuth();
+
+                const user = AttentiaCore.getUser();
+                const authBtn = document.querySelector('.btn-login');
+
+                if (user) {
+                    authBtn.textContent = 'Logout';
+                    authBtn.href = '#';
+                    authBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        AttentiaCore.logout();
+                    });
+                }
+            } else {
+                console.error('AttentiaCore not loaded');
+                return;
+            }
+
+            const container = document.getElementById('books-container');
+            const searchInput = document.getElementById('book-search');
+
+            function renderBooks(filter = '') {
+                container.innerHTML = '';
+                const searchTerm = filter.toLowerCase();
+
+                if (typeof booksData === 'undefined') {
+                    container.innerHTML = '<p style="color: #ff5555; text-align: center; grid-column: 1/-1;">Error loading books data.</p>';
+                    return;
+                }
+
+                const filteredBooks = booksData.filter(book =>
+                    book.title.toLowerCase().includes(searchTerm) ||
+                    book.author.toLowerCase().includes(searchTerm) ||
+                    (book.description && book.description.toLowerCase().includes(searchTerm))
+                );
+
+                if (filteredBooks.length === 0) {
+                    container.innerHTML = '<p style="color: #8b949e; text-align: center; grid-column: 1/-1;">No books found matching your search.</p>';
+                    return;
+                }
+
+                filteredBooks.forEach(book => {
+                    const card = document.createElement('div');
+                    card.className = 'book-card';
+
+                    // Check for progress
+                    const progress = AttentiaCore.getBookProgress(book.id);
+                    let progressHTML = '';
+                    let btnText = 'Start Reading';
+                    let btnIcon = 'fa-book-open';
+
+                    if (progress && book.type === 'text') {
+                        const percent = Math.round(progress.percentage * 100);
+                        progressHTML = `
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${percent}%"></div>
+                            </div>
+                            <div style="text-align: right; font-size: 12px; color: #8b949e; margin-top: 5px;">${percent}% Complete</div>
+                        `;
+                        btnText = 'Continue Reading';
+                        btnIcon = 'fa-bookmark';
+                    } else if (book.type === 'pdf') {
+                        btnText = 'Open PDF';
+                        btnIcon = 'fa-file-pdf';
+                    }
+
+                    card.innerHTML = `
+                        <div class="book-cover-container">
+                            <img src="${book.cover}" alt="${book.title}" class="book-cover">
+                        </div>
+                        <div class="book-content">
+                            <div class="book-meta">
+                                <span>${book.type === 'pdf' ? 'PDF' : 'Interactive'}</span>
+                            </div>
+                            <h3 class="book-title">${book.title}</h3>
+                            <div class="book-author">by ${book.author}</div>
+                            <p class="book-desc">${book.description || 'No description available.'}</p>
+                            <div class="book-actions">
+                                <a href="reader.html?book=${book.id}" class="btn-read" onclick="trackBookRead('${book.title}', '${book.type}')">
+                                    <i class="fa-solid ${btnIcon}"></i> ${btnText}
+                                </a>
+                                ${progressHTML}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            // Initial Render
+            renderBooks();
+
+            // Search Listener
+            searchInput.addEventListener('input', (e) => {
+                renderBooks(e.target.value);
+            });
+        });
+    </script>
+</body>
+
+</html>

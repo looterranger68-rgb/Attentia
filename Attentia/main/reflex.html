@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reflex x Dash - Attentia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Game Specific Styles */
+        body {
+            overflow: hidden;
+        }
+
+        /* Prevent scrolling during game */
+
+        .game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: #0b0d0f;
+            overflow: hidden;
+        }
+
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 40px;
+            font-size: 24px;
+            font-weight: 700;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 30px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .hud-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hud-item i {
+            color: #00bfff;
+        }
+
+        .game-target {
+            position: absolute;
+            cursor: pointer;
+            transition: transform 0.1s;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .game-target:active {
+            transform: scale(0.9);
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Shapes */
+        .shape-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #00bfff;
+            box-shadow: 0 0 15px #00bfff;
+        }
+
+        .shape-square {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            background: #ff0055;
+            box-shadow: 0 0 15px #ff0055;
+        }
+
+        .shape-triangle {
+            width: 0;
+            height: 0;
+            border-left: 35px solid transparent;
+            border-right: 35px solid transparent;
+            border-bottom: 60px solid #00ff88;
+            filter: drop-shadow(0 0 10px #00ff88);
+        }
+
+        /* Overlays */
+        .overlay-screen {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .btn-game {
+            padding: 15px 40px;
+            font-size: 18px;
+            background: linear-gradient(45deg, #00bfff, #0077aa);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-game:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 191, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #333;
+            margin-top: 15px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="game-container" id="game-area">
+        <!-- HUD -->
+        <div class="hud">
+            <div class="hud-item">
+                <i class="fa-solid fa-clock"></i>
+                <span id="timer">30</span>
+            </div>
+            <div class="hud-item">
+                <i class="fa-solid fa-trophy"></i>
+                <span id="score">0</span>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="overlay-screen">
+            <h1>Reflex × Dash</h1>
+            <p>Test your reaction speed! Click the targets as fast as you can before they disappear.</p>
+            <button class="btn-game" id="btn-start">Start Game</button>
+            <button class="btn-game btn-secondary" onclick="location.href='games.html'">Back to Menu</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="overlay-screen hidden">
+            <h1>Game Over</h1>
+            <p>Great job! Here is how you performed.</p>
+            <h2 style="font-size: 64px; margin: 20px 0; color: white;" id="final-score">0</h2>
+            <button class="btn-game" id="btn-restart">Play Again</button>
+            <button class="btn-game btn-secondary" onclick="location.href='games.html'">Back to Menu</button>
+        </div>
+    </div>
+
+    <script src="../js/AttentiaCore.js"></script>
+    <script src="../js/ReflexGame.js"></script>
+    <script>
+        const gameArea = document.getElementById('game-area');
+        const timerEl = document.getElementById('timer');
+        const scoreEl = document.getElementById('score');
+        const startScreen = document.getElementById('start-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const finalScoreEl = document.getElementById('final-score');
+
+        let game = null;
+
+        function initGame() {
+            // Get difficulty from Core
+            const difficulty = AttentiaCore.getDifficulty('reflex_dash');
+            console.log('Loaded difficulty:', difficulty);
+
+            game = new ReflexGame({
+                duration: 30,
+                difficulty: difficulty,
+                onTick: (time) => {
+                    timerEl.textContent = time;
+                },
+                onScoreUpdate: (score) => {
+                    scoreEl.textContent = score;
+                },
+                onSpawnTarget: (target) => {
+                    spawnTargetElement(target);
+                },
+                onGameOver: (result) => {
+                    endGame(result);
+                }
+            });
+
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            game.start();
+        }
+
+        function spawnTargetElement(data) {
+            const el = document.createElement('div');
+            el.className = `game-target shape-${data.type}`;
+            el.style.left = data.x + '%';
+            el.style.top = data.y + '%';
+
+            // Auto-remove after some time (simulating "miss" or just cleanup)
+            // Harder difficulty could mean faster disappear
+            const disappearTime = 2000 / (AttentiaCore.getDifficulty('reflex_dash').speed || 1);
+
+            const timeout = setTimeout(() => {
+                if (el.parentNode) el.remove();
+            }, disappearTime);
+
+            el.addEventListener('mousedown', (e) => {
+                e.preventDefault(); // Prevent text selection
+                game.hitTarget(data.id, data.type);
+                clearTimeout(timeout);
+
+                // Visual feedback
+                el.style.transform = 'scale(1.5)';
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    if (el.parentNode) el.remove();
+                }, 100);
+            });
+
+            gameArea.appendChild(el);
+        }
+
+        function endGame(result) {
+            finalScoreEl.textContent = result.score;
+            gameOverScreen.classList.remove('hidden');
+
+            // Save run to Core
+            AttentiaCore.saveRun('reflex_dash', {
+                outcome: 'win', // Or logic for win/loss threshold
+                reward: result.score,
+                timestamp: Date.now(),
+                promptUsedKey: 'reflex_standard',
+                actionSequence: [] // Could track clicks here
+            });
+        }
+
+        document.getElementById('btn-start').addEventListener('click', initGame);
+        document.getElementById('btn-restart').addEventListener('click', initGame);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess - Attentia Professional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* --- Cyber-Grandmaster Theme (Local Scope) --- */
+        :root {
+            --chess-bg: #0b0d0f;
+            --chess-panel: rgba(22, 27, 34, 0.95);
+            --chess-board-white: #2a303c;
+            --chess-board-black: #161b22;
+            --chess-accent: #00bfff;
+            --chess-accent-glow: rgba(0, 191, 255, 0.6);
+            --chess-highlight-legal: rgba(0, 255, 127, 0.4);
+            --chess-highlight-capture: rgba(255, 68, 68, 0.5);
+            --chess-highlight-last: rgba(0, 191, 255, 0.3);
+            --chess-highlight-check: rgba(255, 0, 85, 0.6);
+            --chess-text-main: #e6edf3;
+            --chess-text-muted: #8b949e;
+        }
+
+        body {
+            background: var(--chess-bg);
+            color: var(--chess-text-main);
+            overflow: hidden;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Layout Grid */
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            /* Centered Board */
+            grid-template-rows: 80px 1fr 80px;
+            /* Header, Main, Footer */
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Background Video */
+        .background-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .background-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Header / HUD */
+        .game-header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+            z-index: 20;
+        }
+
+        .hud-stats {
+            display: flex;
+            gap: 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .hud-item span {
+            color: var(--chess-accent);
+        }
+
+        /* Main Board Area */
+        .board-area {
+            grid-column: 2;
+            grid-row: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .chess-board {
+            width: 75vh;
+            height: 75vh;
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            border: 12px solid #1c2128;
+            border-radius: 8px;
+            box-shadow: 0 0 60px rgba(0, 191, 255, 0.15);
+            background: var(--chess-board-black);
+            position: relative;
+        }
+
+        /* Squares */
+        .square {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .square.white {
+            background-color: var(--chess-board-white);
+        }
+
+        .square.black {
+            background-color: var(--chess-board-black);
+        }
+
+        /* Highlights */
+        .square.last-move {
+            background-color: var(--chess-highlight-last) !important;
+        }
+
+        .square.check {
+            box-shadow: inset 0 0 30px var(--chess-highlight-check);
+            animation: pulse-red 1.5s infinite;
+        }
+
+        .square.legal-move::after {
+            content: '';
+            width: 20%;
+            height: 20%;
+            background: var(--chess-highlight-legal);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--chess-highlight-legal);
+        }
+
+        .square.capture-move::after {
+            content: '';
+            width: 100%;
+            height: 100%;
+            border: 4px solid var(--chess-highlight-capture);
+            border-radius: 50%;
+            box-sizing: border-box;
+            box-shadow: 0 0 15px var(--chess-highlight-capture);
+        }
+
+        /* Pieces */
+        .piece {
+            width: 95%;
+            /* Increased size */
+            height: 95%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+            transition: transform 0.15s cubic-bezier(0.4, 0.0, 0.2, 1);
+            z-index: 2;
+        }
+
+        .piece:hover {
+            transform: translateY(-5px) scale(1.1);
+            filter: drop-shadow(0 10px 10px rgba(0, 191, 255, 0.4));
+        }
+
+        .piece.dragging {
+            opacity: 0.8;
+            transform: scale(1.2);
+            z-index: 100;
+            cursor: grabbing;
+        }
+
+        /* Side Panel (Overlay Drawer) */
+        .side-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            /* Hidden by default */
+            width: 350px;
+            height: 100%;
+            background: rgba(22, 27, 34, 0.98);
+            border-left: 1px solid #30363d;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
+            transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 100;
+        }
+
+        .side-panel.active {
+            right: 0;
+        }
+
+        .panel-header {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--chess-accent);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--chess-text-muted);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: color 0.2s;
+        }
+
+        .tab-btn.active {
+            color: #fff;
+            border-bottom: 2px solid var(--chess-accent);
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            color: #d0d7de;
+        }
+
+        /* Move History List (Table Style) */
+        .move-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 10px;
+        }
+
+        .move-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 1fr;
+            padding: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.03);
+            align-items: center;
+        }
+
+        .move-row:nth-child(even) {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .move-num {
+            color: var(--chess-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .move-san {
+            color: #fff;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 3px;
+            transition: background 0.2s;
+        }
+
+        .move-san:hover {
+            background: rgba(0, 191, 255, 0.2);
+        }
+
+        .move-san.active {
+            color: var(--chess-accent);
+            text-shadow: 0 0 5px var(--chess-accent);
+        }
+
+        /* Learning / Analysis */
+        .analysis-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--chess-accent);
+        }
+
+        .eval-bar-container {
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .eval-bar {
+            height: 100%;
+            background: var(--chess-accent);
+            width: 50%;
+            transition: width 0.5s;
+        }
+
+        /* Controls Footer */
+        .game-footer {
+            grid-column: 2;
+            grid-row: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .control-btn:hover {
+            background: rgba(0, 191, 255, 0.2);
+            border-color: var(--chess-accent);
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
+        }
+
+        .control-btn.primary {
+            background: var(--chess-accent);
+            color: #000;
+            font-weight: 600;
+            border: none;
+        }
+
+        .control-btn.primary:hover {
+            background: #33ccff;
+            box-shadow: 0 0 20px var(--chess-accent);
+        }
+
+        /* Settings Modal (Reused & Styled) */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            padding: 30px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: inset 0 0 10px rgba(255, 0, 85, 0.2);
+            }
+
+            50% {
+                box-shadow: inset 0 0 40px rgba(255, 0, 85, 0.8);
+            }
+
+            100% {
+                box-shadow: inset 0 0 10px rgba(255, 0, 85, 0.2);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 60px 1fr 100px;
+            }
+
+            .side-panel {
+                position: fixed;
+                right: -350px;
+                top: 0;
+                bottom: 0;
+                width: 300px;
+                transition: right 0.3s;
+                z-index: 50;
+            }
+
+            .side-panel.open {
+                right: 0;
+            }
+
+            .chess-board {
+                width: 90vw;
+                height: 90vw;
+            }
+
+            .game-header {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background-video">
+        <video autoplay loop muted playsinline>
+            <source src="../video/brain.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="game-header">
+            <div class="logo" style="font-weight: 700; font-size: 1.5rem; color: #fff;">
+                <i class="fa-solid fa-chess-knight" style="color: var(--chess-accent); margin-right: 10px;"></i>Attentia
+                Chess
+            </div>
+            <div class="hud-stats">
+                <div class="hud-item" id="turnIndicator">White's Turn</div>
+                <div class="hud-item" id="timerDisplay">10:00</div>
+            </div>
+            <!-- Toggle Button -->
+            <button class="control-btn" id="btn-toggle-panel"
+                style="font-size: 1.2rem; width: 50px; height: 50px; border-radius: 50%; padding: 0; justify-content: center;">
+                <i class="fa-solid fa-circle-question"></i>
+            </button>
+        </header>
+
+        <!-- Main Board -->
+        <main class="board-area">
+            <div id="chessBoard" class="chess-board">
+                <!-- Generated by JS -->
+            </div>
+        </main>
+
+        <!-- Side Panel -->
+        <aside class="side-panel" id="sidePanel">
+            <div class="panel-header">
+                <span>Game Info</span>
+                <button class="control-btn" id="closePanel"
+                    style="padding: 5px 10px; border: none; background: none;"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="history">History</button>
+                <button class="tab-btn" data-tab="learn">Teach Me</button>
+            </div>
+
+            <div class="panel-content" id="panel-history">
+                <div class="move-list" id="moveList">
+                    <!-- Moves go here -->
+                </div>
+            </div>
+
+            <div class="panel-content" id="panel-learn" style="display: none;">
+                <div class="analysis-box">
+                    <h4 style="color: var(--chess-accent); margin: 0 0 10px 0;">Current Position</h4>
+                    <div class="eval-bar-container">
+                        <div class="eval-bar" style="width: 50%;"></div>
+                    </div>
+                    <p id="tutorMessage">Develop your pieces to control the center.</p>
+                </div>
+                <div style="margin-top: 20px;">
+                    <h4 style="color: #fff;">Key Concepts</h4>
+                    <ul style="padding-left: 20px; line-height: 1.6;">
+                        <li>Control the center</li>
+                        <li>Develop knights before bishops</li>
+                        <li>Castle early</li>
+                    </ul>
+                </div>
+                <!-- Settings Button inside Panel -->
+                <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid #30363d;">
+                    <button class="control-btn" id="btn-settings" style="width: 100%; justify-content: center;"><i
+                            class="fa-solid fa-gear"></i> Settings</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Footer Controls -->
+        <footer class="game-footer">
+            <button class="control-btn" id="btn-undo"><i class="fa-solid fa-rotate-left"></i> Undo</button>
+            <button class="control-btn" id="btn-hint"><i class="fa-regular fa-lightbulb"></i> Hint</button>
+            <button class="control-btn primary" id="btn-new-game">New Game</button>
+            <button class="control-btn" onclick="location.href='games.html'"><i class="fa-solid fa-door-open"></i>
+                Exit</button>
+        </footer>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-content">
+            <h2 style="color: #fff; margin-top: 0;">Settings</h2>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; color: var(--chess-text-muted); margin-bottom: 10px;">Difficulty</label>
+                <select id="difficultySelect"
+                    style="width: 100%; padding: 10px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 6px;">
+                    <option value="easy">Easy (Beginner)</option>
+                    <option value="medium" selected>Medium (Intermediate)</option>
+                    <option value="hard">Hard (Advanced)</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; color: var(--chess-text-muted); margin-bottom: 10px;">Mode</label>
+                <select id="modeSelect"
+                    style="width: 100%; padding: 10px; background: #0d1117; border: 1px solid #30363d; color: #fff; border-radius: 6px;">
+                    <option value="ai">Player vs AI</option>
+                    <option value="pvp">Local PvP</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="control-btn" id="closeSettings">Close</button>
+                <button class="control-btn primary" id="applySettings">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/AttentiaCore.js"></script>
+    <script src="../js/ChessGame.js"></script>
+    <script>
+        // UI Logic for Layout
+        const tabs = document.querySelectorAll('.tab-btn');
+        const panels = {
+            history: document.getElementById('panel-history'),
+            learn: document.getElementById('panel-learn')
+        };
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                Object.values(panels).forEach(p => p.style.display = 'none');
+                panels[tab.dataset.tab].style.display = 'block';
+            });
+        });
+
+        // Panel Toggle Logic
+        const sidePanel = document.getElementById('sidePanel');
+        const toggleBtn = document.getElementById('btn-toggle-panel');
+        const closePanelBtn = document.getElementById('closePanel');
+
+        toggleBtn.addEventListener('click', () => {
+            sidePanel.classList.add('active');
+        });
+
+        closePanelBtn.addEventListener('click', () => {
+            sidePanel.classList.remove('active');
+        });
+
+        // Modal Logic
+        const modal = document.getElementById('settingsModal');
+        document.getElementById('btn-settings').onclick = () => modal.classList.add('active');
+        document.getElementById('closeSettings').onclick = () => modal.classList.remove('active');
+        document.getElementById('applySettings').onclick = () => {
+            // TODO: Apply settings to game instance
+            modal.classList.remove('active');
+            if (window.game) window.game.restart();
+        };
+
+        // Initialize Game
+        window.onload = () => {
+            if (typeof ChessGame !== 'undefined') {
+                window.game = new ChessGame({
+                    container: 'chessBoard',
+                    difficulty: 'medium'
+                });
+                window.game.start();
+            }
+        };
+    </script>
+</body>
+
+</html>

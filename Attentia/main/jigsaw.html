@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jigsaw Puzzle - Attentia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: #0b0d0f;
+            color: white;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        .puzzle-board {
+            width: 100vw;
+            height: 100vh;
+            background: #1a1d21;
+            position: relative;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* Overlays */
+        .overlay-screen {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .btn-game {
+            padding: 15px 40px;
+            font-size: 18px;
+            background: linear-gradient(45deg, #00bfff, #0077aa);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .game-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            z-index: 50;
+        }
+
+        .control-btn {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00bfff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="game-container">
+        <div id="canvas-wrapper" class="puzzle-board">
+            <canvas id="puzzle-canvas"></canvas>
+        </div>
+
+        <div class="game-controls">
+            <button class="control-btn" id="btn-zoom-in" title="Zoom In"><i
+                    class="fa-solid fa-magnifying-glass-plus"></i></button>
+            <button class="control-btn" id="btn-zoom-out" title="Zoom Out"><i
+                    class="fa-solid fa-magnifying-glass-minus"></i></button>
+            <button class="control-btn" id="btn-hint" title="Show Hint"><i class="fa-solid fa-lightbulb"></i></button>
+            <button class="control-btn" id="btn-reset-view" title="Reset View"><i
+                    class="fa-solid fa-compress"></i></button>
+            <button class="control-btn" onclick="location.href='games.html'" title="Exit"><i
+                    class="fa-solid fa-door-open"></i></button>
+        </div>
+    </div>
+
+    <!-- Start Screen with Settings -->
+    <div id="start-screen" class="overlay-screen">
+        <h1>Jigsaw Puzzle</h1>
+        <p style="color:#cbd5db; margin-bottom:20px;">Drag the pieces to complete the image.</p>
+
+        <div class="settings-group" style="margin-bottom: 20px; text-align: left; width: 300px;">
+            <label style="color: #8b949e; display: block; margin-bottom: 5px;">Difficulty</label>
+            <select id="difficulty-select"
+                style="width: 100%; padding: 10px; background: #161b22; border: 1px solid #30363d; color: white; border-radius: 6px;">
+                <option value="easy">Easy (3x3)</option>
+                <option value="medium">Medium (4x4)</option>
+                <option value="hard">Hard (5x5)</option>
+            </select>
+        </div>
+
+        <div class="settings-group" style="margin-bottom: 30px; text-align: left; width: 300px;">
+            <label style="color: #8b949e; display: block; margin-bottom: 5px;">Image Category</label>
+            <select id="category-select"
+                style="width: 100%; padding: 10px; background: #161b22; border: 1px solid #30363d; color: white; border-radius: 6px;">
+                <option value="nature">Nature</option>
+                <option value="abstract">Abstract</option>
+                <option value="animals">Animals</option>
+                <option value="space">Space</option>
+            </select>
+        </div>
+
+        <button class="btn-game" id="btn-start">Start Game</button>
+        <button class="btn-game" style="background:transparent; border:1px solid #555;"
+            onclick="location.href='games.html'">Back</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="overlay-screen hidden">
+        <h1>Puzzle Completed!</h1>
+        <p>Great job!</p>
+        <button class="btn-game" id="btn-restart">Play Again</button>
+        <button class="btn-game" style="background:transparent; border:1px solid #555; margin-top:10px;"
+            onclick="location.href='games.html'">Back to Menu</button>
+    </div>
+
+    <script src="../js/AttentiaCore.js"></script>
+    <script src="../js/JigsawGame.js"></script>
+    <script>
+        const startScreen = document.getElementById('start-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        let game = null;
+
+        function initGame() {
+            const difficultyLevel = document.getElementById('difficulty-select').value;
+            const category = document.getElementById('category-select').value;
+
+            game = new JigsawGame({
+                difficulty: { level: difficultyLevel },
+                category: category,
+                onGameOver: (res) => {
+                    gameOverScreen.classList.remove('hidden');
+                    AttentiaCore.saveRun('jigsaw', {
+                        outcome: 'win',
+                        reward: res.score,
+                        timestamp: Date.now(),
+                        promptUsedKey: `jigsaw_${difficultyLevel}`,
+                        actionSequence: []
+                    });
+                }
+            });
+
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            game.start('puzzle-canvas');
+        }
+
+        document.getElementById('btn-start').addEventListener('click', initGame);
+        document.getElementById('btn-restart').addEventListener('click', () => {
+            gameOverScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        });
+
+        // Control buttons
+        document.getElementById('btn-zoom-in').onclick = () => game && game.zoom(1.1);
+        document.getElementById('btn-zoom-out').onclick = () => game && game.zoom(0.9);
+        document.getElementById('btn-reset-view').onclick = () => game && game.resetView();
+        document.getElementById('btn-hint').onclick = () => game && game.showHint();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcasts & Videos - Attentia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <style>
+        /* Podcast Specific Styles */
+        .podcast-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            padding: 0 50px 80px 50px;
+        }
+
+        .podcast-card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            overflow: hidden;
+            flex-basis: 340px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .podcast-card:hover {
+            transform: translateY(-5px);
+            border-color: #00BFFF;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+        }
+
+        .podcast-thumbnail {
+            width: 100%;
+            height: 200px;
+            background-color: #0d1117;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .podcast-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .podcast-card:hover .podcast-thumbnail img {
+            opacity: 1;
+        }
+
+        .play-overlay {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 191, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .podcast-card:hover .play-overlay {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .podcast-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .podcast-tag {
+            display: inline-block;
+            background: rgba(0, 191, 255, 0.1);
+            color: #00BFFF;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            align-self: flex-start;
+        }
+
+        .podcast-info h3 {
+            color: #ffffff;
+            font-size: 20px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .podcast-info p {
+            color: #8b949e;
+            font-size: 14px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .podcast-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #8b949e;
+            font-size: 13px;
+            border-top: 1px solid #30363d;
+            padding-top: 15px;
+        }
+
+        .podcast-meta i {
+            margin-right: 5px;
+            color: #00BFFF;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background-video">
+        <video autoplay loop muted playsinline>
+            <source src="../video/brain.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="page-content">
+        <header class="navbar">
+            <div class="logo">
+                <a href="index.html">ATTENTIA</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="../../index.html">Home</a></li>
+                    <li><a href="games.html">Games</a></li>
+                    <li><a href="meditation.html">Meditation</a></li>
+                    <li><a href="podcast.html" style="color: #00BFFF;">Podcasts</a></li>
+                    <li><a href="ebooks.html">E-Books</a></li>
+                    <li><a href="to-do-list.html">To Do List</a></li>
+                    <li><a href="analysis.html">Analysis</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-login">Login / Sign Up</a>
+            </div>
+        </header>
+
+        <main>
+            <section class="page-hero">
+                <h1>Podcasts & Videos</h1>
+                <p>Curated content to help you focus, relax, and understand your mind.</p>
+            </section>
+
+            <section class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="focus">Focus</button>
+                <button class="filter-btn" data-filter="relaxation">Relaxation</button>
+                <button class="filter-btn" data-filter="neuroscience">Neuroscience</button>
+                <button class="filter-btn" data-filter="motivation">Motivation</button>
+            </section>
+
+            <section class="podcast-grid">
+                <!-- Card 1: Focus -->
+                <div class="podcast-card" data-category="focus neuroscience"
+                    onclick="window.open('https://www.youtube.com/watch?v=nm1TxQj9IsQ', '_blank')"
+                    style="cursor: pointer;">
+                    <div class="podcast-thumbnail">
+                        <img src="https://img.youtube.com/vi/nm1TxQj9IsQ/maxresdefault.jpg" alt="Huberman Lab Focus">
+                        <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="podcast-info">
+                        <span class="podcast-tag">Neuroscience</span>
+                        <h3>Focus Toolkit: Tools to Improve Your Focus & Concentration</h3>
+                        <p>Dr. Andrew Huberman explains the science of focus and provides actionable
+                            tools.</p>
+                        <div class="podcast-meta">
+                            <span><i class="fa-regular fa-clock"></i> 88 min</span>
+                            <span><i class="fa-solid fa-headphones"></i> Podcast</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Relaxation -->
+                <div class="podcast-card" data-category="relaxation"
+                    onclick="window.open('https://www.youtube.com/watch?v=jfKfPfyJRdk', '_blank')"
+                    style="cursor: pointer;">
+                    <div class="podcast-thumbnail">
+                        <img src="https://img.youtube.com/vi/jfKfPfyJRdk/maxresdefault.jpg" alt="Lofi Girl">
+                        <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="podcast-info">
+                        <span class="podcast-tag">Relaxation</span>
+                        <h3>lofi hip hop radio - beats to relax/study to</h3>
+                        <p>The famous Lofi Girl stream. Perfect background music for deep work or
+                            relaxation.</p>
+                        <div class="podcast-meta">
+                            <span><i class="fa-regular fa-clock"></i> LIVE</span>
+                            <span><i class="fa-solid fa-music"></i> Music</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Motivation -->
+                <div class="podcast-card" data-category="motivation"
+                    onclick="window.open('https://www.youtube.com/watch?v=rrkrvAUbU9Y', '_blank')"
+                    style="cursor: pointer;">
+                    <div class="podcast-thumbnail">
+                        <img src="https://img.youtube.com/vi/rrkrvAUbU9Y/maxresdefault.jpg" alt="Growth Mindset">
+                        <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="podcast-info">
+                        <span class="podcast-tag">Motivation</span>
+                        <h3>The Power of Believing That You Can Improve</h3>
+                        <p>Carol Dweck's TED talk on the "Growth Mindset" and how it affects
+                            success.</p>
+                        <div class="podcast-meta">
+                            <span><i class="fa-regular fa-clock"></i> 10 min</span>
+                            <span><i class="fa-solid fa-microphone"></i> Talk</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Sleep -->
+                <div class="podcast-card" data-category="sleep relaxation"
+                    onclick="window.open('https://www.youtube.com/watch?v=aEqlQvczMJQ', '_blank')"
+                    style="cursor: pointer;">
+                    <div class="podcast-thumbnail">
+                        <img src="https://img.youtube.com/vi/aEqlQvczMJQ/maxresdefault.jpg" alt="Sleep Meditation">
+                        <div class="play-overlay"><i class="fa-solid fa-play"></i></div>
+                    </div>
+                    <div class="podcast-info">
+                        <span class="podcast-tag">Sleep</span>
+                        <h3>Guided Sleep Meditation for Deep Sleep</h3>
+                        <p>Ease into a restful night's sleep with this guided meditation session.
+                        </p>
+                        <div class="podcast-meta">
+                            <span><i class="fa-regular fa-clock"></i> 30 min</span>
+                            <span><i class="fa-solid fa-moon"></i> Audio</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/AttentiaCore.js"></script>
+    <script src="../js/content-filter.js"></script>
+    <script>
+        // Auth Guard
+        AttentiaCore.requireAuth();
+
+        // Update UI based on Auth State
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = AttentiaCore.getUser();
+            const authBtn = document.querySelector('.btn-login');
+
+            if (user) {
+                authBtn.textContent = 'Logout';
+                authBtn.href = '#';
+                authBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    AttentiaCore.logout();
+                });
+            }
+
+            // --- Tracking Logic ---
+            const cards = document.querySelectorAll('.podcast-card');
+            cards.forEach(card => {
+                // Remove inline onclick to handle it here for tracking
+                const originalOnClick = card.getAttribute('onclick');
+                card.removeAttribute('onclick');
+
+                card.addEventListener('click', () => {
+                    const title = card.querySelector('h3').textContent;
+                    const category = card.dataset.category;
+
+                    AttentiaCore.saveRun('podcast', {
+                        title: title,
+                        category: category,
+                        timestamp: Date.now(),
+                        outcome: 'viewed'
+                    });
+
+                    // Execute original action (open URL)
+                    // Extract URL from original onclick string: window.open('...', '_blank')
+                    const match = originalOnClick.match(/'([^']+)'/);
+                    if (match && match[1]) {
+                        window.open(match[1], '_blank');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
